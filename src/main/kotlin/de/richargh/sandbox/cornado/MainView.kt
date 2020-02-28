@@ -16,10 +16,10 @@ class MainView: View() {
     var lastNameField: TextField by singleAssign()
     var ageField: TextField by singleAssign()
 
-    private val persons = mutableListOf<Person>().asObservable()
+    private val personsViewModel = PersonsViewModel()
 
     init {
-        events.personAdded.subscribe { persons.add(it) }
+        events.personAdded.subscribe { personsViewModel.add(it) }
     }
 
     override val root = vbox {
@@ -52,7 +52,7 @@ class MainView: View() {
         val completion = SimpleDoubleProperty(0.5)
         progressindicator(completion) {}
 
-        tableview(persons) {
+        tableview(personsViewModel.items) {
             column("First Name", Person::firstnameProperty)
             column("Second Name", Person::lastnameProperty)
             column("Birthday", Person::birthdayProperty)
