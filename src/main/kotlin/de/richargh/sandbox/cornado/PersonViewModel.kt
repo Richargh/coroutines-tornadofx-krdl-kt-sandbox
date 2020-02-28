@@ -9,7 +9,7 @@ import java.time.LocalDate
 import java.time.Period
 import java.util.*
 
-class Person(firstname: String, lastname: String, birthday: LocalDate, id: UUID = UUID.randomUUID()) {
+class PersonViewModel(firstname: String, lastname: String, birthday: LocalDate, id: UUID = UUID.randomUUID()) {
     val idProperty = SimpleStringProperty(id.toString())
     var id by idProperty
 

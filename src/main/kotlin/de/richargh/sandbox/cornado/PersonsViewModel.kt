@@ -4,9 +4,9 @@ import tornadofx.asObservable
 
 class PersonsViewModel {
 
-    val items = mutableListOf<Person>().asObservable()
+    val items = mutableListOf<PersonViewModel>().asObservable()
 
-    fun add(person: Person){
+    fun add(person: PersonViewModel){
         items.add(person)
     }
 

@@ -46,7 +46,7 @@ class MainView: CoroutineScope, View() {
                 launch {
                     info("Heavy Computation")
                     delay(2000)
-                    val person = Person(firstNameField.text, lastNameField.text, LocalDate.of(2020, 8, 11))
+                    val person = PersonViewModel(firstNameField.text, lastNameField.text, LocalDate.of(2020, 8, 11))
                     withContext(Dispatchers.JavaFx){
                         events.personAdded.push(person)
                     }
@@ -57,10 +57,10 @@ class MainView: CoroutineScope, View() {
         progressindicator(completion) {}
 
         tableview(personsViewModel.items) {
-            column("First Name", Person::firstnameProperty)
-            column("Second Name", Person::lastnameProperty)
-            column("Birthday", Person::birthdayProperty)
-            column("Age", Person::ageProperty).cellFormat {
+            column("First Name", PersonViewModel::firstnameProperty)
+            column("Second Name", PersonViewModel::lastnameProperty)
+            column("Birthday", PersonViewModel::birthdayProperty)
+            column("Age", PersonViewModel::ageProperty).cellFormat {
                 text = it.toString()
                 style {
                     backgroundColor += if (it != null && it < 18) {
