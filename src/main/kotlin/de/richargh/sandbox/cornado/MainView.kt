@@ -3,8 +3,10 @@ package de.richargh.sandbox.cornado
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.scene.control.TextField
 import javafx.scene.paint.Color
+import kotlinx.coroutines.*
 import tornadofx.*
 import java.time.LocalDate
+import kotlinx.coroutines.javafx.JavaFx
 
 class MainView: View() {
 
@@ -15,6 +17,10 @@ class MainView: View() {
     var ageField: TextField by singleAssign()
 
     private val persons = mutableListOf<Person>().asObservable()
+
+    init {
+        events.personAdded.subscribe { persons.add(it) }
+    }
 
     override val root = vbox {
         hbox {
@@ -32,8 +38,15 @@ class MainView: View() {
         button("ADD") {
             useMaxWidth = true
             action {
-                events.gamePlayingNotification.push(
-                        Person(firstNameField.text, lastNameField.text, LocalDate.of(2020, 8, 11)))
+                info("On Add")
+                GlobalScope.launch(Dispatchers.Main) {
+                    info("Heavy Computation")
+                    delay(2000)
+                    val person = Person(firstNameField.text, lastNameField.text, LocalDate.of(2020, 8, 11))
+                    withContext(Dispatchers.JavaFx){
+                        events.personAdded.push(person)
+                    }
+                }
             }
         }
         val completion = SimpleDoubleProperty(0.5)
@@ -53,13 +66,6 @@ class MainView: View() {
                     }
                 }
             }
-        }
-    }
-
-    init {
-        events.gamePlayingNotification.subscribe {
-            info("Game Playing")
-            persons.add(it)
         }
     }
 }

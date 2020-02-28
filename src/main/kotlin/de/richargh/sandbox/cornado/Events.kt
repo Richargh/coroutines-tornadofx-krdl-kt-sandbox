@@ -5,9 +5,9 @@ import tornadofx.Component
 import tornadofx.ScopedInstance
 
 class Events: Component(), ScopedInstance {
-    val gamePlayingNotification = EventSource<Person>()
+    val personAdded = EventSource<Person>()
 
     init {
-        gamePlayingNotification.subscribe { info("Notification: Game playing") }
+        personAdded.subscribe { info("Notification: Person added") }
     }
 }
