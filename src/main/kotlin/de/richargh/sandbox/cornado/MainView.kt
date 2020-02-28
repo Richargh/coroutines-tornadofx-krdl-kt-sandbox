@@ -8,7 +8,11 @@ import tornadofx.*
 import java.time.LocalDate
 import kotlinx.coroutines.javafx.JavaFx
 
-class MainView: View() {
+class MainView: CoroutineScope, View() {
+
+    override val coroutineContext = SupervisorJob() +
+                                    Dispatchers.Default +
+                                    CoroutineName(javaClass.simpleName)
 
     private val events: Events by inject()
 
@@ -39,7 +43,7 @@ class MainView: View() {
             useMaxWidth = true
             action {
                 info("On Add")
-                GlobalScope.launch(Dispatchers.Main) {
+                launch {
                     info("Heavy Computation")
                     delay(2000)
                     val person = Person(firstNameField.text, lastNameField.text, LocalDate.of(2020, 8, 11))
