@@ -58,7 +58,7 @@ class MainView: View() {
 
     init {
         events.gamePlayingNotification.subscribe {
-            println("Game Playing")
+            info("Game Playing")
             persons.add(it)
         }
     }

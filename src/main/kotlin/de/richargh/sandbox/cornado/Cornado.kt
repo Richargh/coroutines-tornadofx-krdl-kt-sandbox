@@ -24,7 +24,7 @@ class Cornado: App() {
         repeat(10){ index ->
             launch {
                 delay(100)
-                println("foo $index")
+                info(index)
             }
         }
     }

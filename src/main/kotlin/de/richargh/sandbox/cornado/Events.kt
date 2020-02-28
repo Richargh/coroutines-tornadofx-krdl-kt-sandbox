@@ -8,6 +8,6 @@ class Events: Component(), ScopedInstance {
     val gamePlayingNotification = EventSource<Person>()
 
     init {
-        gamePlayingNotification.subscribe { println("Notification: Game playing") }
+        gamePlayingNotification.subscribe { info("Notification: Game playing") }
     }
 }
