@@ -3,9 +3,21 @@
 *Features*
 
 * Kotlin Coroutines
-* TornadoFx
+* TornadoFx (see link:https://github.com/edvin/tornadofx-guide[TornadoFx Guide])
 * How coroutines can make your code non-blocking
 
 == Usage
 
 * Build `./gradlew build`
+
+If you are on Java11 you need to add the link:https://github.com/edvin/tornadofx-guide/blob/master/part1/2.%20Setting%20Up.md[OpenJfx dependencies]
+because JavaFx was removed from the JDK. The following additional gradle dependencies might do the trick:
+
+`implementation("org.openjfx:javafx:11.0.2")`
+`implementation("org.openjfx:javafx-base:11.0.2")`
+`implementation("org.openjfx:javafx-controls:11.0.2")`
+
+== TornadoFx Examples
+
+* link:https://github.com/edvin/todomvc[TodoMvc] from which I took most view inspiration
+* link:https://github.com/lunivore/hellbound[Hellbound: A Tetronimos desktop game] from which I took the event communication
