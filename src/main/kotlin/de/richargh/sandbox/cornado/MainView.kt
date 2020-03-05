@@ -47,7 +47,8 @@ class MainView: CoroutineScope, View() {
                     info("Heavy Computation")
                     delay(2000)
                     val person = PersonViewModel(firstNameField.text, lastNameField.text, LocalDate.of(2020, 8, 11))
-                    withContext(Dispatchers.JavaFx){
+                    withContext(Dispatchers.Main){
+                        info("Pushing Event")
                         events.personAdded.push(person)
                     }
                 }

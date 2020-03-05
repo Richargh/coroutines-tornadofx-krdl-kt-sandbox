@@ -4,7 +4,6 @@ import javafx.application.Application
 import javafx.stage.Stage
 import kotlinx.coroutines.runBlocking
 import tornadofx.App
-import kotlinx.coroutines.javafx.JavaFx as Main
 
 class Cornado: App() {
     override val primaryView = MainView::class
