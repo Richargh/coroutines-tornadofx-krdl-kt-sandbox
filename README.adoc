@@ -41,9 +41,14 @@ NodeJs for example did only have a single thread for a long time and was still a
 that matched or exceeded one-thread-per-request web servers from other programming languages.
 
 The reason for this is that for each request the web server does very little computing and mostly waits for other I/O-operations to terminate.
-To fulfill the request `GET localhost:8080/users?named=Foo` the web server usually needs to access some kind of external database.
-Many web servers block the thread until the database returns the list of users.
+To fulfill the request `GET localhost:8080/books?named=Foo` the web server usually needs to access some kind of external database.
+Many web servers block the thread until the database returns the list of books.
+
 Node can use the event loop, process other web requests, and will be notified once the database operation completes.
+A Coroutine-based server similarly can suspend the coroutine until the database operation completes.
+Until the operation completes another coroutine can use the thread to answer another request.
+
+image::suspend.drawio.png[Coroutines, Threads and suspension]
 
 === Structured Concurrency
 
@@ -77,11 +82,12 @@ but the last two options *don't inherit the scope* from their parent. They do pr
 * Main dispatcher, usually single-thread, useful for UI operations: `Dispatcher.Main`
 * Default dispatcher, threadcount usually equal to CPU-core count, useful for CPU-intensive computation: `Dispatcher.Default`
 * IO dispatcher, threadcount usually 64, useful for operations that wait for IO to complete: `Dispatcher.IO`
-* Single Thread context, single-threaded, maybe useful for you: `newSingleThreadContext("name")`
+* Single Thread context, always single-threaded, maybe useful for you: `newSingleThreadContext("name")`
 
 === Coroutine Builder
 
 * Async op where you care for the result and await() completion: `async {}`
-* Execute op in a new context and await result: `withContext(Dispatcher.IO) {}`
+* Execute op in a new context and suspend until result: `withContext(Dispatcher.IO) {}`
 * Fire and forget async op: `launch {}`
 * Enter coroutine land and block thread until completion: `runBlocking {}`
+
