@@ -58,6 +58,45 @@ and all children inherit the context from it's parent.
 
 That means we can write concurrent code that looks sequential and we can never forget to call `.await()` or similar operations.
 
+=== Implementation Details
+
+The Kotlin compiler uses a concept called continuation under the hood to implement suspending functions. Let's look at an example:
+
+First we'll create a regular class:
+
+. First create a file `Sample.kt` and add only the following line `fun aMethod(aParam: Int): Int{ return 42 }`
+. Compile it with the Kotlin compiler. In my case it's the one IntelliJ uses: `/Applications/IntelliJ\ IDEA.app/Contents/plugins/Kotlin/kotlinc/bin/kotlinc Sample.kt`
+. Decompile it to find a regular Java class: `javap SampleKt.class`:
+
+[source,kotlin]
+----
+public final class SampleKt {
+  public static final int aMethod(int);
+}
+----
+
+Then we'll make our method *suspending*:
+
+. Modify `Sample.kt` so that the line now contains *suspend* `suspend fun aMethod(aParam: Int): Int{ return 42 }`
+. Compile it again
+. After decompilation it now reads:
+
+[source,kotlin]
+----
+public final class SampleKt {
+  public static final java.lang.Object aMethod(int, kotlin.coroutines.Continuation<? super java.lang.Integer>); // <1>
+}
+----
+<1> the method now returns an Object and takes an additional Continuation<Int>
+
+---
+public final class SampleKt {
+  public static final java.lang.Object aMethod(int, kotlin.coroutines.Continuation<? super java.lang.Integer>);
+}
+---
+
+
+
 == Coroutine Cheatsheet
 
 This cheatsheet is inspired by the link:https://blog.kotlin-academy.com/kotlin-coroutines-cheat-sheet-8cf1e284dc35[one from Kotlin Academy].
