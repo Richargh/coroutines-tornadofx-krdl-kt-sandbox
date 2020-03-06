@@ -53,7 +53,11 @@ and all children inherit the context from it's parent.
 
 That means we can write concurrent code that looks sequential and we can never forget to call `.await()` or similar operations.
 
-=== Cheatsheet
+== Coroutine Cheatsheet
+
+This cheatsheet is inspired by the link:https://blog.kotlin-academy.com/kotlin-coroutines-cheat-sheet-8cf1e284dc35[one from Kotlin Academy].
+
+=== Enter Coroutine Scope
 
 To go from the blocking world into coroutine land we either:
 
@@ -65,5 +69,19 @@ There are two more options which might fit your use case, they do have a major p
 * implement `CoroutineScope` interface (which I use for CenterView)
 * or use `GlobalScope.launch {}`
 
-The major feature of Kotlin Coroutines is structured concurrency.
-The two options above don't inherit the scope from their parent, they propagate their scope to their children though.
+The major feature of Kotlin Coroutines is structured concurrency,
+but the last two options *don't inherit the scope* from their parent. They do propagate their scope to their children though, so use them with caution.
+
+=== Dispatcher
+
+* Main dispatcher, usually single-thread, useful for UI operations: `Dispatcher.Main`
+* Default dispatcher, threadcount usually equal to CPU-core count, useful for CPU-intensive computation: `Dispatcher.Default`
+* IO dispatcher, threadcount usually 64, useful for operations that wait for IO to complete: `Dispatcher.IO`
+* Single Thread context, single-threaded, maybe useful for you: `newSingleThreadContext("name")`
+
+=== Coroutine Builder
+
+* Async op where you care for the result and await() completion: `async {}`
+* Execute op in a new context and await result: `withContext(Dispatcher.IO) {}`
+* Fire and forget async op: `launch {}`
+* Enter coroutine land and block thread until completion: `runBlocking {}`
