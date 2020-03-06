@@ -5,34 +5,40 @@ import kotlinx.coroutines.*
 import java.io.IOException
 import java.net.URL
 
-fun main() = runBlocking {
-    compute("What about whatism?")
-    val fooTitle = searchTitleAsync("Foo")
-    val fubarTitle = searchTitleAsync("Fubar")
+class MiniComplexConsoleSample {
 
-    info("Foo is [${fooTitle.await()}]")
-    info("Foo is [${fubarTitle.await()}]")
-}
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) = runBlocking {
+            compute("What about whatism?")
+            val fooTitle = searchTitleAsync("Foo")
+            val fubarTitle = searchTitleAsync("Fubar")
 
-fun CoroutineScope.compute(question: String) = launch(Dispatchers.Default) {
-    info("Before Heavy computation")
-    delay(2000)
-    info("The answer is always [42]")
-}
-
-fun CoroutineScope.searchTitleAsync(term: String): Deferred<String?> {
-    return async(Dispatchers.IO) {
-        info("Searching")
-        val response: String? = try {
-            URL("https://en.wikipedia.org/w/index.php?search=$term")
-                    .openStream()
-                    .bufferedReader()
-                    .use { it.readText() }
-        } catch (ex: IOException){
-            info("Request failed: $ex")
-            null
+            info("Foo is [${fooTitle.await()}]")
+            info("Foo is [${fubarTitle.await()}]")
         }
 
-        response?.split("<title>")?.get(1)?.split("</title>")?.get(0)
+        fun CoroutineScope.compute(question: String) = launch(Dispatchers.Default) {
+            info("Before Heavy computation")
+            delay(2000)
+            info("The answer is always [42]")
+        }
+
+        fun CoroutineScope.searchTitleAsync(term: String): Deferred<String?> {
+            return async(Dispatchers.IO) {
+                info("Searching")
+                val response: String? = try {
+                    URL("https://en.wikipedia.org/w/index.php?search=$term")
+                            .openStream()
+                            .bufferedReader()
+                            .use { it.readText() }
+                } catch (ex: IOException){
+                    info("Request failed: $ex")
+                    null
+                }
+
+                response?.split("<title>")?.get(1)?.split("</title>")?.get(0)
+            }
+        }
     }
 }
