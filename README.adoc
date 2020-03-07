@@ -60,7 +60,7 @@ That means we can write concurrent code that looks sequential and we can never f
 
 === Implementation Details
 
-The Kotlin compiler uses a concept called continuation under the hood to implement suspending functions. Let's look at an example:
+The Kotlin compiler uses a concept called link:https://en.wikipedia.org/wiki/Continuation#First-class_continuations[continuation] under the hood to implement suspending functions. Let's look at an example:
 
 First we'll create a regular class:
 
@@ -75,7 +75,7 @@ public final class SampleKt {
 }
 ----
 
-Then we'll make our method *suspending*:
+Next we can compare this with *suspending* code:
 
 . Modify `Sample.kt` so that the line now contains *suspend* `suspend fun aMethod(aParam: Int): Int{ return 42 }`
 . Compile it again
@@ -89,17 +89,12 @@ public final class SampleKt {
 ----
 <1> the method now returns an Object and takes an additional Continuation<Int>
 
----
-public final class SampleKt {
-  public static final java.lang.Object aMethod(int, kotlin.coroutines.Continuation<? super java.lang.Integer>);
-}
----
-
+The `kotlin.coroutines.Continuation<Int>` interface has the method `fun resumeWith(result: Result<Int>)`. This is used to resume the execution of the corresponding coroutine. We pass a successful or failed [result] as the return value of the last suspension point.
 
 
 == Coroutine Cheatsheet
 
-This cheatsheet is inspired by the link:https://blog.kotlin-academy.com/kotlin-coroutines-cheat-sheet-8cf1e284dc35[one from Kotlin Academy].
+image::Scope-Context-Suspend.drawio.png[Coroutine Cheatsheet]
 
 === Enter Coroutine Scope
 
